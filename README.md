@@ -4,6 +4,10 @@ This fremework based on [go-telegram-bot-api](https://github.com/go-telegram-bot
 
 ## Telestage event driven framework using fsm.
 
+### Installation
+
+`go get github.com/askoldex/telestage`
+
 ### Quick Start
 
 ```go
@@ -11,7 +15,7 @@ This fremework based on [go-telegram-bot-api](https://github.com/go-telegram-bot
 package main
 
 import (
-	"github.com/askoldex/telestage/v1"
+	"github.com/askoldex/telestage"
 	"log"
 	"os"
 

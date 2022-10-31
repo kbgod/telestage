@@ -1,4 +1,6 @@
 # Modern Golang Telegram bot fremework
+[![Test](https://github.com/askoldex/telestage/actions/workflows/test.yml/badge.svg)](https://github.com/askoldex/telestage/actions/workflows/test.yml)
+[![codecov.io](https://codecov.io/gh/askoldex/telestage/coverage.svg?branch=master)](https://codecov.io/gh/askoldex/telestage)
 
 This fremework based on [go-telegram-bot-api](https://github.com/go-telegram-bot-api/telegram-bot-api) and inspired by [telegraf.js](https://telegraf.js.org/)
 

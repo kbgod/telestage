@@ -14,7 +14,12 @@ type Context interface {
 	Chat() *tgbotapi.Chat
 	ChatID() int64
 	Text() string
+	// Fast methods
+
 	Reply(string) (tgbotapi.Message, error)
+	ReplyWithMenu(string, interface{}) (tgbotapi.Message, error)
+	ReplyHTML(string) (tgbotapi.Message, error)
+	ReplyWithMenuHTML(string, interface{}) (tgbotapi.Message, error)
 
 	// Get retrieves data from the context.
 	Get(key string) interface{}
@@ -121,6 +126,43 @@ func (nc *NativeContext) Text() string {
 
 func (nc *NativeContext) Reply(text string) (tgbotapi.Message, error) {
 	return nc.bot.Send(tgbotapi.NewMessage(nc.ChatID(), text))
+}
+
+func (nc *NativeContext) ReplyWithMenu(text string, menu interface{}) (tgbotapi.Message, error) {
+	return nc.bot.Send(tgbotapi.MessageConfig{
+		BaseChat: tgbotapi.BaseChat{
+			ChatID:           nc.ChatID(),
+			ReplyToMessageID: 0,
+			ReplyMarkup:      menu,
+		},
+		Text:                  text,
+		DisableWebPagePreview: false,
+	})
+}
+
+func (nc *NativeContext) ReplyHTML(text string) (tgbotapi.Message, error) {
+	return nc.bot.Send(tgbotapi.MessageConfig{
+		BaseChat: tgbotapi.BaseChat{
+			ChatID:           nc.ChatID(),
+			ReplyToMessageID: 0,
+		},
+		Text:                  text,
+		ParseMode:             tgbotapi.ModeHTML,
+		DisableWebPagePreview: false,
+	})
+}
+
+func (nc *NativeContext) ReplyWithMenuHTML(text string, menu interface{}) (tgbotapi.Message, error) {
+	return nc.bot.Send(tgbotapi.MessageConfig{
+		BaseChat: tgbotapi.BaseChat{
+			ChatID:           nc.ChatID(),
+			ReplyToMessageID: 0,
+			ReplyMarkup:      menu,
+		},
+		Text:                  text,
+		ParseMode:             tgbotapi.ModeHTML,
+		DisableWebPagePreview: false,
+	})
 }
 
 func (nc *NativeContext) Set(key string, value interface{}) {

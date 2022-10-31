@@ -105,12 +105,12 @@ func (ss *stateStore) Set(userID int64, state string) {
 
 ```go
 mainScene.Use(func(ef telestage.EventFn) telestage.EventFn {
-		return func(ctx telestage.Context) {
-			if ctx.Message().Sticker == nil { // ignore if message is sticker
-				ef(ctx)
-			}
+	return func(ctx telestage.Context) {
+		if ctx.Message().Sticker == nil { // ignore if message is sticker
+			ef(ctx)
 		}
-	})
+	}
+})
 
 mainScene.OnMessage(func(ctx telestage.Context) {
     ctx.Reply("Hello") // answer on any message

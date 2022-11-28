@@ -16,6 +16,7 @@ type Context interface {
 	Text() string
 	// Fast methods
 
+	SetDisableWebPreviewForShortMethods(bool)
 	Reply(string) (tgbotapi.Message, error)
 	ReplyWithMenu(string, interface{}) (tgbotapi.Message, error)
 	ReplyHTML(string) (tgbotapi.Message, error)
@@ -32,6 +33,8 @@ type NativeContext struct {
 	upd   *tgbotapi.Update
 	lock  sync.RWMutex
 	store map[string]interface{}
+
+	disableWebPreview bool
 }
 
 func (nc *NativeContext) Bot() *tgbotapi.BotAPI {
@@ -125,6 +128,8 @@ func (nc *NativeContext) Text() string {
 }
 
 func (nc *NativeContext) Reply(text string) (tgbotapi.Message, error) {
+	m := tgbotapi.NewMessage(nc.ChatID(), text)
+	m.DisableWebPagePreview = nc.disableWebPreview
 	return nc.bot.Send(tgbotapi.NewMessage(nc.ChatID(), text))
 }
 
@@ -136,7 +141,7 @@ func (nc *NativeContext) ReplyWithMenu(text string, menu interface{}) (tgbotapi.
 			ReplyMarkup:      menu,
 		},
 		Text:                  text,
-		DisableWebPagePreview: false,
+		DisableWebPagePreview: nc.disableWebPreview,
 	})
 }
 
@@ -148,7 +153,7 @@ func (nc *NativeContext) ReplyHTML(text string) (tgbotapi.Message, error) {
 		},
 		Text:                  text,
 		ParseMode:             tgbotapi.ModeHTML,
-		DisableWebPagePreview: false,
+		DisableWebPagePreview: nc.disableWebPreview,
 	})
 }
 
@@ -161,8 +166,12 @@ func (nc *NativeContext) ReplyWithMenuHTML(text string, menu interface{}) (tgbot
 		},
 		Text:                  text,
 		ParseMode:             tgbotapi.ModeHTML,
-		DisableWebPagePreview: false,
+		DisableWebPagePreview: nc.disableWebPreview,
 	})
+}
+
+func (nc *NativeContext) SetDisableWebPreviewForShortMethods(isDisabled bool) {
+	nc.disableWebPreview = isDisabled
 }
 
 func (nc *NativeContext) Set(key string, value interface{}) {
